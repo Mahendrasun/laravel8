@@ -56,5 +56,83 @@ return Redirect()->route('home.slider')->with('success', 'Slider Inserted Succes
 
 }
 
+public function EditSlider($id){
+    $sliders = Slide::find($id);
+    return view('admin.slider.edit',compact('sliders'));
+}
+
+public function UpdateSlider(Request $request,$id){
+
+    $old_image = $request->old_image;
+    
+    $validated = $request->validate([
+        'title' => 'required|min:4',
+        
+    ],[
+        'title.required' => 'Please enter Slider Title',
+        
+    ]);
+    
+$brang_image = $request->file('image');
+
+if($brang_image){
+    $name_gen = hexdec(uniqid());
+$img_ext = strtolower($brang_image->getClientOriginalExtension());
+$img_name = $name_gen.'.'.$img_ext;
+$up_location = 'image/slider/';
+
+$last_img = $up_location.$img_name;
+
+$brang_image->move($up_location,$img_name);
+
+if($old_image){
+unlink($old_image);
+}
+
+Slide::find($id)->update([
+    'title' => $request->title,
+    'description' => $request->description,
+    'image' => $last_img,
+    'created_at' => Carbon::now()
+]);
+
+$notification = array(
+    'message'=>'Slider Updated Successfully',
+    'alert-type'=>'success'
+);
+return Redirect()->route('home.slider')->with($notification);
+
+}else{
+    Slide::find($id)->update([
+        'title' => $request->title,
+        'description' => $request->description,
+        'created_at' => Carbon::now()
+    ]);
+
+    $notification = array(
+        'message'=>'Slider Updated Successfully',
+        'alert-type'=>'warning'
+    );
+
+    return Redirect()->route('home.slider')->with($notification);
+
+}
+
+}
+public function Deleteslider($id){
+    $image=Slide::find($id);
+    $old_image = $image->image;
+    unlink($old_image);
+    Slide::find($id)->delete();
+
+    $notification = array(
+        'message'=>'Slider Deleted Successfully',
+        'alert-type'=>'error'
+    );
+    return Redirect()->back()->with($notification);
+
+}
+
+
 
 }

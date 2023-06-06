@@ -6,8 +6,11 @@ use App\Http\Middleware\CheckAge;
 use App\Models\User;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ChangePass;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\AboutController;
 use Illuminate\Support\Facades\DB;
+use App\Models\Multipic;
 // use App\Http\Middleware\UserMiddleware;
 
 /*
@@ -27,8 +30,10 @@ Route::get('/email/verify', function () {
 
 Route::get('/', function () {
     $brands = DB::table('brands')->get();
-    return view('home',compact('brands'));
-});
+    $abouts = DB::table('home_abouts')->first();
+    $portfolio = Multipic::all();
+    return view('home',compact('brands','abouts','portfolio'));
+})->name('/');
 
 Route::get('/home', function () {
     return ('home page');
@@ -47,11 +52,41 @@ Route::get('/about', function () {
 Route::get('/slider',[HomeController::class,'HomeSlider'])->name('home.slider');
 Route::GET('/slider/add',[HomeController::class,'AddSlider'])->name('add.slider');
 Route::POST('/store/slider',[HomeController::class,'StoreSlider'])->name('store.slider');
+Route::get('/slider/edit/{id}',[HomeController::class,'EditSlider']);
+Route::POST('/slider/update/{id}',[HomeController::class,'UpdateSlider'])->name('upadte.slider');
+Route::get('/delete/slider/{id}',[HomeController::class,'Deleteslider']);
 
+// HOme About All Route
+Route::get('/home/about',[AboutController::class,'HomeAbout'])->name('home.about');
+Route::GET('/about/add',[AboutController::class,'AboutAdd'])->name('add.about');
+Route::POST('/store/about',[AboutController::class,'StoreAbout'])->name('store.about');
+Route::GET('/about/edit/{id}',[AboutController::class,'EditAbout'])->name('edit.about');
+Route::POST('/update/about/{id}',[AboutController::class,'UpdateAbout']);
+Route::GET('about/delete/{id}',[AboutController::class,'DeleteAbout']);
+
+// portfolio All Route
+Route::get('/portfolio',[AboutController::class,'Portfolio'])->name('portfolio');
 
 
 
 Route::get('/contact-us',[ContactController::class,'index'])->name("con");
+
+// Admin Contact route 
+
+Route::get('admin/contact',[ContactController::class,'AdminContact'])->name("admin.contact");
+Route::GET('/add/contact',[ContactController::class,'ContactAdd'])->name('add.contact');
+Route::POST('/store/contact',[ContactController::class,'StoreContact'])->name('store.contact');
+Route::get('admin/message',[ContactController::class,'AdminMessage'])->name("admin.message");
+Route::get('contact/edit/{id}',[ContactController::class,'EditAdminContact']);
+Route::POST('contact/update/{id}',[ContactController::class,'UpdateContact']);
+Route::get('contact/delete/{id}',[ContactController::class,'DeleteContact']);
+
+// Website contact Route
+
+Route::get('/contact',[ContactController::class,'Contact'])->name("contact");
+Route::POST('/contact/form',[ContactController::class,'ContactForm'])->name('contact.form');
+
+
 
 // CategoryController
 Route::get('/category/all',[CategoryController::class,'AllCat'])->name('all.category');
@@ -88,3 +123,11 @@ Route::middleware([
 
 Route::GET('/user/logout',[BrandController::class,'Logout'])->name('user.logout');
 
+// User Pofile Method
+
+Route::get('/change/password',[ChangePass::class,'ChangePassword'])->name('change.password');
+Route::POST('/update/password',[ChangePass::class,'UpdatePassword'])->name('password.update');
+
+// User Profile
+Route::GET('/update/profile',[ChangePass::class,'UpdateProfile'])->name('profile.update');
+Route::POST('/update/user',[ChangePass::class,'Updateuser'])->name('user.update');

@@ -65,7 +65,11 @@ Brand::insert([
     'created_at' => Carbon::now()
 ]);
 
-return Redirect()->back()->with('success', 'Brand Inserted Successfully');
+$notification = array(
+    'message'=>'Brand Inserted Successfully',
+    'alert-type'=>'success'
+);
+return Redirect()->back()->with($notification);
 
 
 }
@@ -112,14 +116,25 @@ Brand::find($id)->update([
     'brand_image' => $last_img,
     'created_at' => Carbon::now()
 ]);
-return Redirect()->route('all.brand')->with('success', 'Brand Inserted Successfully');
+
+$notification = array(
+    'message'=>'Brand Updated Successfully',
+    'alert-type'=>'success'
+);
+return Redirect()->route('all.brand')->with($notification);
 
 }else{
     Brand::find($id)->update([
         'brand_name' => $request->brand_name,
         'created_at' => Carbon::now()
     ]);
-    return Redirect()->route('all.brand')->with('success', 'Brand Inserted Successfully');
+
+    $notification = array(
+        'message'=>'Brand Updated Successfully',
+        'alert-type'=>'warning'
+    );
+
+    return Redirect()->route('all.brand')->with($notification);
 
 }
 
@@ -132,7 +147,12 @@ public function DeleteBrand($id){
     $old_image = $image->brand_image;
     unlink($old_image);
     Brand::find($id)->delete();
-    return Redirect()->back()->with('success', 'Brand Deleted Successfully');
+
+    $notification = array(
+        'message'=>'Brand Deleted Successfully',
+        'alert-type'=>'error'
+    );
+    return Redirect()->back()->with($notification);
 
 }
 

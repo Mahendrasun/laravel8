@@ -5,8 +5,8 @@
     <div class="py-12">
       <div class="container">
         <div class="row">
-<h4>Home Slider</h4>
-<a href="{{route('add.slider')}}"><button class="btn btn-info">Add Slider</button></a>
+<h4>Contact Page</h4>
+<a href="{{route('add.contact')}}"><button class="btn btn-info">Add Contact</button></a>
 </br>
 <div class="col-md-12">
     <div class="card">
@@ -21,7 +21,7 @@
 @endif
 
         <div class="card-header">
-        All Sliders
+        All About
         </div>
     <!-- @php($i=1) -->
 
@@ -29,22 +29,21 @@
   <thead>
     <tr>
       <th scope="col" width="5%">SL No</th>
-      <th scope="col" width="10%">Slider Title</th>
-      <th scope="col" width="25%">Slider Description</th>
-      <th scope="col" width="25%">Image</th>
+      <th scope="col" width="20%">Contact Address</th>
+      <th scope="col" width="25%">Contact Email</th>
+      <th scope="col" width="15%">Contact Number</th>
       <th scope="col" width="15%">Action</th>
     </tr>
-
-    @foreach($sliders as $slider)
+@php($i=1)
+    @foreach($contacts as $cont)
     <tr>
-      <th scope="row">{{$sliders->firstItem()+$loop->index}}</th>
-      <th >{{$slider->title}}</th>
-      <th >{{$slider->description}}</th>
-      <th ><img src="{{ asset($slider->image)}}" alt="" style="height:40px;width:70px;"> </th>
-     
+      <th scope="row">{{$i++}}</th>
+      <th >{{$cont->address}}</th>
+      <th >{{$cont->email}}</th>
+      <th >{{$cont->phone}}</th>
       <th>
-<a href="{{url('slider/edit/'.$slider->id)}}" class="btn btn-info">Edit</a>
-<a href="{{url('delete/slider/'.$slider->id)}}" onclick="return confirm('Are you sure to Delete')"  class="btn btn-danger">Delete</a>
+<a href="{{url('contact/edit/'.$cont->id)}}" class="btn btn-info">Edit</a>
+<a href="{{url('contact/delete/'.$cont->id)}}" onclick="return confirm('Are you sure to Delete')"  class="btn btn-danger">Delete</a>
 
       </th>
     </tr>
